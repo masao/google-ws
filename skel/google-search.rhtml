@@ -28,12 +28,12 @@ function addword(word) {
 <dl class="wordlist">
 <% @wordlist[term].each do |w| %>
 <dt><%=h w[:name] %> <span class="term-name">(<%= term.name %>)</span></dt>
-<dd>上位語:
+<dd>上位:
     <% w[:parent].each do |p| %>
     <a href="javascript:addword('<%=u p.name %>')"><%=h p.name %></a>
     <% end %>
 </dd>
-<dd>下位語:
+<dd>下位:
     <% w[:child].each  do |c| %>
     <a href="javascript:addword('<%=u c.name %>')"><%=h c.name %></a>
     <% end %>
