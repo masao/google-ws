@@ -11,7 +11,7 @@ GC.disable
 GOOGLE_KEY = File.open("/home/masao/.google_key").read.chomp
 GOOGLE_WSDL = 'http://api.google.com/GoogleSearch.wsdl'
 
-EDR_WSDL = 'http://nile.ulis.ac.jp/~masao/term-viz-ws/term-viz.wsdl'
+EDR_WSDL = 'http://nile.ulis.ac.jp/~masao/term-viz-ws/edr/term.wsdl'
 
 MAX = 10
 MAX_PAGE = 20
@@ -29,9 +29,11 @@ model = {
 if cgi.has_key?("key") && cgi["key"][0].length > 0
    edr_link = nil
    obj = SOAP::WSDLDriverFactory.new(EDR_WSDL).createDriver
+   STDERR.puts "#{EDR_WSDL}.creatDriver done."
    # obj.resetStream
    # obj.setWireDumpDev(STDERR)
    result = obj.doWordSearch(cgi["key"][0])
+   STDERR.puts "obj.doWordSearch done."
    result = result.exactMatchElements
    if result.size > 0
       edr_link = result.collect do |node|
@@ -56,7 +58,11 @@ if cgi.has_key?("key") && cgi["key"][0].length > 0
    page = cgi["page"][0].to_i if cgi.has_key?("page")
 
    google = SOAP::WSDLDriverFactory.new(GOOGLE_WSDL).createDriver
+   STDERR.puts "#{GOOGLE_WSDL}.createDriver done."
+   google.resetStream
+   google.setWireDumpDev(File.open("/tmp/google_cgi.#{$$}", "w"))
    result = google.doGoogleSearch( GOOGLE_KEY, cgi["key"][0], page * MAX, MAX, false, "", false, "", 'utf-8', 'utf-8' )
+   STDERR.puts "google.doGoogleSearch done."
 
    count = result.startIndex - 1
 
