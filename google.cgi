@@ -4,7 +4,7 @@
 $:.unshift "."
 require 'google'
 
-# GC.disable
+GC.disable
 
 ID = '$Id$'
 
@@ -28,8 +28,6 @@ begin
 
 	print cgi.header( 'text/html; charset=utf-8' )
 	print google.eval_rhtml
-
-	puts "--#{GoogleCGI::GoogleSearch::BOUNDARY}--" if cgi.valid?( "key" )
 
 rescue Exception
 	print "Content-Type: text/plain\n\n"

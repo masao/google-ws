@@ -53,12 +53,12 @@ module GoogleCGI
 
 			# 時間がかかる処理になるので、multipart/x-mixed-replace で
 			# ブラウザに渡しておく。
-			print @cgi.header( "multipart/x-mixed-replace;boundary=#{BOUNDARY}" )
-			print "--#{BOUNDARY}\n"
-			print @cgi.header( 'text/html; charset=utf-8' )
-			dummy = GoogleDummy::new( @cgi.clone, "./skel/google.rhtml" )
-			print dummy.eval_rhtml
-			print "\n--#{BOUNDARY}\n"
+#  			print @cgi.header( "multipart/x-mixed-replace;boundary=#{BOUNDARY}" )
+#  			print "--#{BOUNDARY}\n"
+#  			print @cgi.header( 'text/html; charset=utf-8' )
+#  			dummy = GoogleDummy::new( @cgi.clone, "./skel/google.rhtml" )
+#  			print dummy.eval_rhtml
+#  			print "\n--#{BOUNDARY}\n"
 
 			require 'uconv'
 			require 'soap/wsdlDriver'
@@ -78,19 +78,21 @@ module GoogleCGI
 		end
 
 		def word_search
-			STDERR.puts "word_search"
-			term_link = []
-			TERM_WSDL.keys.each do |key|
-				obj = SOAP::WSDLDriverFactory.new(TERM_WSDL[key].wsdl).createDriver
-				STDERR.puts "#{TERM_WSDL[key].name} - creatDriver done."
+			term_link = {}
+			TERM_WSDL.values.each do |service|
+				obj = SOAP::WSDLDriverFactory.new(service.wsdl).createDriver
+				# obj.resetStream
+				# obj.setWireDumpDev(File.open("/tmp/google_word.#{$$}", "w"))
+				STDERR.puts "#{service.name} - creatDriver done."
 				match = obj.doWordSearch( key ).exactMatchElements
 				STDERR.puts "obj.doWordSearch done."
 				unless match.empty? then
-					STDERR.puts " #{TERM_WSDL[key].name} - #{match.size} found!!"
-					term_link << match.collect do |node|
+					STDERR.puts " #{service.name} - #{match.size} found!!"
+					match.each do |node|
 						wordlist = obj.getWordList(node.idref)
-						wordlist.collect do |word|
-							{
+						wordlist.each do |word|
+							term_link[service] = [] unless term_link[service]
+							term_link[service] << {
 								:name => word.name,
 								:child => word.child,
 								:parent => word.parent
@@ -154,7 +156,7 @@ module GoogleCGI
 					result << %Q[<a href="#{base_url};page=#{i}">[#{i+1}]</a>\n]
 				end
 			end
-			unless last_page * MAX > estimatedTotalResultsCount then
+			unless last_page == 0 || last_page * MAX > estimatedTotalResultsCount then
 				result << "..."
 			end
 			result

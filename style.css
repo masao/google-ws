@@ -38,3 +38,9 @@ dl.wordlist dt {
 dl.wordlist dd a {
   text-decoration: underline;
 }
+
+span.term-name {
+  font-weight: normal;
+  font-size: smaller;
+  color: #3c3;
+}

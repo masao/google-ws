@@ -24,10 +24,10 @@ function addword(word) {
 <a href="http://www.google.com/apis/">Google Web APIs</a>
 を利用した検索ができます。
 </p>
-<% STDERR.puts instance_variables %>
-<% @wordlist.each do |w| %>
+<% @wordlist.keys.each do |term| %>
 <dl class="wordlist">
-<dt><%=h w[:name] %></dt>
+<% @wordlist[term].each do |w| %>
+<dt><%=h w[:name] %> <span class="term-name">(<%= term.name %>)</span></dt>
 <dd>上位語:
     <% w[:parent].each do |p| %>
     <a href="javascript:addword('<%=u p.name %>')"><%=h p.name %></a>
@@ -38,6 +38,7 @@ function addword(word) {
     <a href="javascript:addword('<%=u c.name %>')"><%=h c.name %></a>
     <% end %>
 </dd>
+<% end %>
 </dl>
 <% end %>
 
@@ -51,7 +52,7 @@ function addword(word) {
 <% count = startIndex %>
 <% resultElements.each do |e| %>
 <dl>
-  <dt><%= count %>. <a href="<%= e.URL %>"><%= e.title %></a></dt>
+  <dt><%= count %>. <a href="<%= e.URL %>"><%= if e.title.length > 0 then e.title; else e.URL; end %></a></dt>
   <dd class="snippet"><%= e.snippet %></dd>
   <dd class="url"><a href="<%= e.URL %>"><%= e.URL %></a></dd>
 </dl>
