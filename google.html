@@ -5,12 +5,12 @@
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rev="made" href="mailto:masao@ulis.ac.jp">
 <title id="title">Google 検索</title>
-<script type="text/javascript">
+<script type="text/javascript"><!--
 function addword(word) {
   var key = document.forms[0].elements[0];
   key.value += " " + word;
 }
-</script>
+--></script>
 </head>
 <body>
 <h1>Google 検索</h1>
@@ -25,9 +25,11 @@ function addword(word) {
 <a href="http://www.google.com/apis/">Google Web APIs</a>
 を利用した検索ができます。
 </p>
+<p id="message" class="message">
+</p>
 <div id="result">
-<dl id="edr_link" class="edr_link">
-<dt id="name"></dt>
+<dl id="term_link" class="term_link">
+<dt id="name"><span id="term_name"></span></dt>
 <dd>上位語: <span id="parent"></span> </dd>
 <dd>下位語: <span id="child"></span></dd>
 </dl>
