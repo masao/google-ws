@@ -1,0 +1,19 @@
+@import url("../default.css");
+
+div.form { text-align: center; }
+dt { 
+  margin-top: 0.5ex; 
+  font-weight: normal;
+}
+dd {
+  text-indent: 0;
+  font-size: smaller;
+}
+dd a { text-decoration: none; }
+p.headline {
+  font-size: smaller;
+  background-color: #3366cc;
+  color: white;
+  text-align: right;
+  padding: 2px;
+}

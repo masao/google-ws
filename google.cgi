@@ -18,9 +18,10 @@ cgi = CGI.new
 print cgi.header("text/html; charset=utf-8")
 
 model = {
-   :title => 'Gooogle 検索',
+   :title => 'Google 検索',
    :result => false,
    :id => '$Id$',
+   :key => '',
 }
 
 if cgi.has_key?("key") && cgi["key"][0].length > 0
@@ -45,8 +46,12 @@ if cgi.has_key?("key") && cgi["key"][0].length > 0
 
    model[:result] = {
       :count => result.estimatedTotalResultsCount,
+      :estimate_is_exact => result.estimateIsExact ? false : "約",
       :start => result.startIndex,
       :end => result.endIndex,
+      :search_time => sprintf("%.02f", result.searchTime),
+      :search_comments => result.searchComments,
+      :search_tips => result.searchTips,
       :search_result => result.resultElements.collect do |ele|
 	 {
 	    :title => e(:a, :href => ele.URL) { noescape { ele.title } },
