@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+<link rel="stylesheet" href="../default.css" type="text/css">
+<link rev="made" href="mailto:masao@ulis.ac.jp">
+<title id="title">Google 検索</title>
+<style type="text/css">
+div.form { text-align: center; }
+dt { 
+margin-top: 0.5ex; 
+font-weight: normal;
+}
+dd {
+text-indent: 0;
+font-size: smaller;
+}
+dd a { text-decoration: none; }
+</style>
+</head>
+<body>
+<h1 id="title">Google 検索</h1>
+<form action="google.cgi" method="GET">
+<div class="form">
+<input id="key" type="text" name="key" size="50" value="">
+<input type="submit" value=" Google 検索 ">
+</div>
+</form>
+<p>
+<a href="http://www.google.com/apis/">Google Web APIs</a>
+を利用した検索ができます。
+</p>
+<div id="result">
+<hr>
+<p><span id="count">n</span> 件中、
+   <span id="start">1</span> 〜 <span id="end">10</span> 件目
+</p>
+<dl id="search_result">
+  <dt><span id="count"></span>. <span id="title"></span></dt>
+  <dd id="snippet" class="snippet"></dd>
+  <dd id="url" class="url"></dd>
+</dl>
+<p>ページ:
+<span id="is_first_page">...</span>
+<span id="page_list">[1]</span>
+<span id="is_last_page">...</span>
+</p>
+</div>
+<hr>
+<address>
+高久雅生 (Takaku Masao)<br>
+<a href="http://nile.ulis.ac.jp/~masao/">http://nile.ulis.ac.jp/~masao/</a>, 
+<a href="mailto:masao@ulis.ac.jp">masao@ulis.ac.jp</a>
+</address>
+<div id="id" class="id">$Id$</div>
+</body>
+</html>
