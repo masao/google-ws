@@ -5,6 +5,12 @@
 <link rel="stylesheet" href="style.css" type="text/css">
 <link rev="made" href="mailto:masao@ulis.ac.jp">
 <title id="title">Google 検索</title>
+<script type="text/javascript">
+function addword(word) {
+  var key = document.forms[0].elements[0];
+  key.value += " " + word;
+}
+</script>
 </head>
 <body>
 <h1>Google 検索</h1>
@@ -20,6 +26,11 @@
 を利用した検索ができます。
 </p>
 <div id="result">
+<dl id="edr_link" class="edr_link">
+<dt id="name"></dt>
+<dd>上位語: <span id="parent"></span> </dd>
+<dd>下位語: <span id="child"></span></dd>
+</dl>
 <p class="headline">
 <span id="estimate_is_exact">約</span><span id="count">n</span>件中
 <span id="start">1</span> - <span id="end">10</span>件目・・

@@ -17,3 +17,17 @@ p.headline {
   text-align: right;
   padding: 2px;
 }
+
+dl.edr_link {
+  margin-left: 5%;
+  border-left: thick solid silver;
+  border-bottom: thin solid gray;
+  padding-left: 10px;
+}
+dl.edr_link dt {
+  font-size: normal;
+  font-weight: bold;
+}
+dl.edr_link dd a {
+  text-decoration: underline;
+}

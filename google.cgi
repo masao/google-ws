@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby -wT
+#!/usr/local/bin/ruby -w
 # -*- Ruby -*-
 
 require 'cgi'
@@ -6,10 +6,12 @@ require 'amrita/template'
 require 'uconv'
 require 'soap/wsdlDriver'
 
-include Amrita
+GC.disable
 
 GOOGLE_KEY = File.open("/home/masao/.google_key").read.chomp
 GOOGLE_WSDL = 'http://api.google.com/GoogleSearch.wsdl'
+
+EDR_WSDL = 'http://nile.ulis.ac.jp/~masao/term-viz-ws/term-viz.wsdl'
 
 MAX = 10
 MAX_PAGE = 20
@@ -25,8 +27,30 @@ model = {
 }
 
 if cgi.has_key?("key") && cgi["key"][0].length > 0
-   model[:title] += ": #{CGI.escapeHTML(cgi["key"][0])}"
-   model[:key] = a(:value => CGI.escapeHTML(cgi["key"][0]))
+   edr_link = nil
+   obj = SOAP::WSDLDriverFactory.new(EDR_WSDL).createDriver
+   # obj.resetStream
+   # obj.setWireDumpDev(STDERR)
+   result = obj.doWordSearch(cgi["key"][0])
+   result = result.exactMatchElements
+   if result.size > 0
+      edr_link = result.collect do |node|
+	 wordlist = obj.getWordList(node.idref)
+	 wordlist.collect do |word|
+	    {
+	       :name => word.name,
+	       :child => word.child.collect {|node|
+		  Amrita::noescape { "<a href=\"javascript:addword('#{node.name}')\">#{node.name}</a> " }
+	       },
+	       :parent => word.parent.collect {|node|
+		  Amrita::noescape { "<a href=\"javascript:addword('#{node.name}')\">#{node.name}</a> " }
+	       },
+	    }
+	 end
+      end
+   end
+   model[:title] << ": #{CGI.escapeHTML(cgi["key"][0])}"
+   model[:key] = Amrita::a(:value => CGI.escapeHTML(cgi["key"][0]))
 
    page = 0
    page = cgi["page"][0].to_i if cgi.has_key?("page")
@@ -54,9 +78,11 @@ if cgi.has_key?("key") && cgi["key"][0].length > 0
       :search_tips => result.searchTips,
       :search_result => result.resultElements.collect do |ele|
 	 {
-	    :title => e(:a, :href => ele.URL) { noescape { ele.title } },
-	    :url => e(:a, :href => ele.URL) { ele.URL },
-	    :snippet => noescape { ele.snippet },
+	    :title => Amrita::e(:a, :href => ele.URL) {
+	       Amrita::noescape { ele.title }
+	    },
+	    :url => Amrita::e(:a, :href => ele.URL) { ele.URL },
+	    :snippet => Amrita::noescape { ele.snippet },
 	    :count => count += 1,
 	 }
       end,
@@ -64,14 +90,16 @@ if cgi.has_key?("key") && cgi["key"][0].length > 0
 	 if i == page
 	    "[#{i+1}]\n"
 	 else
-	    e(:a, :href => "#{base_url};page=#{i}") { "[#{i+1}]" } + "\n"
+	    Amrita::e(:a, :href => "#{base_url};page=#{i}") { "[#{i+1}]" } + "\n"
 	 end
       end,
       :is_first_page => first_page == 0 ? false : "... ",
       :is_last_page => last_page * MAX > result.estimatedTotalResultsCount ? false : "... ",
+      :edr_link => edr_link
    }
 end
 
-tmpl = TemplateFile.new("google.html")
+tmpl = Amrita::TemplateFile.new("google.html")
 # tmpl.prettyprint = true
+tmpl.use_compiler = true
 tmpl.expand(STDOUT, model)
