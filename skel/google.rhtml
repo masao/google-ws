@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rev="made" href="mailto:masao@ulis.ac.jp">
+<title>Google検索</title>
+<script type="text/javascript"><!--
+function addword(word) {
+  var key = document.forms[0].elements[0];
+  key.value += " " + word;
+}
+--></script>
+</head>
+<body>
+<h1>Google 検索</h1>
+<form action="google.cgi" method="GET">
+<div class="form">
+<input type="text" name="key" size="50" value="">
+<input type="submit" value=" Google 検索 ">
+</div>
+</form>
+<p>
+<a href="http://www.google.com/apis/">Google Web APIs</a>
+を利用した検索ができます。
+</p>
+<%= @message %>
+<hr>
+<address>
+高久雅生 (Takaku Masao)<br>
+<a href="http://nile.ulis.ac.jp/~masao/">http://nile.ulis.ac.jp/~masao/</a>, 
+<a href="mailto:masao@ulis.ac.jp">masao@ulis.ac.jp</a>
+</address>
+<div class="id"><%= ID %></div>
+</body>
+</html>

@@ -18,16 +18,23 @@ p.headline {
   padding: 2px;
 }
 
-dl.edr_link {
+p.message { 
+  text-align: center;
+  font-size: larger;
+  color: #f22;
+  text-decoration: underline;
+}
+
+dl.wordlist {
   margin-left: 5%;
   border-left: thick solid silver;
   border-bottom: thin solid gray;
   padding-left: 10px;
 }
-dl.edr_link dt {
-  font-size: normal;
+dl.wordlist dt {
+  font-size: medium;
   font-weight: bold;
 }
-dl.edr_link dd a {
+dl.wordlist dd a {
   text-decoration: underline;
 }
